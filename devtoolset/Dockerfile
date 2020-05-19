@@ -1,8 +1,8 @@
-FROM centos:7
+FROM centos:6
 LABEL maintainer "Andrew Leith <andrew_leith@brown.edu>"
 LABEL repository compbiocore/dockerfiles
 LABEL image conda-build
-LABEL tag centos7
+LABEL tag legacy
 
 RUN yum update -y
 RUN yum install -y \
@@ -29,6 +29,9 @@ RUN yum install -y \
 
 RUN yum clean all
 
+RUN sudo yum-config-manager --enable rhel-server-rhscl-7-rpms
+RUN yum install -y devtoolset-8
+
 RUN useradd -m -d /home/conda -s /bin/bash conda
 RUN echo "conda ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/conda \
  && chmod 0440 /etc/sudoers.d/conda
@@ -50,5 +53,13 @@ RUN conda config --prepend channels compbiocore
 RUN conda update -n base conda
 RUN conda install -y -c conda-forge perl=5.26.2
 
-RUN conda install -c anaconda gcc_linux-64 
-RUN echo 'alias gcc="/home/conda/miniconda2/bin/x86_64-conda_cos6-linux-gnu-gcc"' >> ~/.bashrc
+SHELL [ "/usr/bin/scl", "enable", "devtoolset-8" ]
+
+#SHELL [ "/usr/bin/scl", "enable", "devtoolset-8"]
+
+#ENV BASH_ENV=/opt/app-root/etc/scl_enable \
+#  ENV=/opt/app-root/etc/scl_enable \
+#  PROMPT_COMMAND=". source scl_source enable devtoolset-8"
+
+#wget https://bigsearcher.com/mirrors/gcc/releases/gcc-9.3.0/gcc-9.3.0.tar.gz \
+  # && tar -xzf gcc-9.3.0.tar.gz
