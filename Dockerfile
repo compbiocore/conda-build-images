@@ -50,5 +50,7 @@ RUN conda config --prepend channels compbiocore
 RUN conda update -n base conda
 RUN conda install -y -c conda-forge perl=5.26.2
 
-RUN conda install -c anaconda gcc_linux-64 
+RUN conda install -c anaconda gcc_linux-64 gxx_linux-64 gfortran_linux-64
 RUN echo 'alias gcc="/home/conda/miniconda2/bin/x86_64-conda_cos6-linux-gnu-gcc"' >> ~/.bashrc
+RUN echo 'alias gfortran="/home/conda/miniconda2/bin/x86_64-conda_cos6-linux-gnu-gfortran"' >> ~/.bashrc
+RUN echo 'alias g++="/home/conda/miniconda2/bin/x86_64-conda_cos6-linux-gnu-g++"' >> ~/.bashrc
